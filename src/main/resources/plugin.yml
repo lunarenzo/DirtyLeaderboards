@@ -8,7 +8,7 @@ load: POSTWORLD
 folia-supported: false
 
 author: romix_42
-website: https://discord.gg/Uh7c6kAYNA
+website: https://github.com/romix42/DirtyLeaderboards
 
 softdepend:
   - Skript
