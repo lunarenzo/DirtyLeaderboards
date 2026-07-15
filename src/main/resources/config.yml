@@ -1,0 +1,75 @@
+settings:
+  # How long collected leaderboard standings are cached, in seconds.
+  cache-seconds: 30
+  # Players whose name starts with any of these prefixes never appear on leaderboards.
+  # It's useful to disallow bedrock players
+  excluded-name-prefixes:
+    - "."
+  # How many offline players are resolved per tick when a leaderboard
+  # uses "source: placeholder". Lower = slower scans, less main-thread work.
+  placeholder-players-per-tick: 200
+
+formatting:
+  numbers:
+    # Thousands separator for full numbers, e.g. 9,999.
+    grouping: ","
+    # Values at or above this are shortened (15.2k, 1.25M). Set to 0 to disable.
+    compact-from: 10000
+    compact-suffixes: [ k, M, B, T ]
+  time:
+    # Time values show the two largest units, e.g. "4d, 3h" or "1w, 6d".
+    separator: ", "
+    # Remove a line to skip that unit entirely (e.g. delete "week" to always use days).
+    units:
+      month: mo
+      week: w
+      day: d
+      hour: h
+      minute: m
+      second: s
+
+displays:
+  main:
+    # Displays with auto-start start automatically when the server boots.
+    auto-start: true
+    # Keeps the chunks around the display loaded so animations never freeze.
+    force-load-chunks: true
+    location:
+      world: world
+      x: -14.5
+      y: 218.0
+      z: -53.5
+      yaw: -45.0
+    # Which leaderboards this display cycles through, in order (ids from leaderboards.yml).
+    rotation:
+      - kills
+      - deaths
+      - playtime
+    billboard:
+      enabled: true
+      background-block: black_concrete
+      border-block: white_concrete
+      width: 5.25
+      height: 3.7
+      bottom-offset: -0.2
+      border-thickness: 0.1
+    progress-bar:
+      enabled: true
+      background-block: gray_concrete
+      foreground-block: white_concrete
+    style:
+      # Name color for offline players.
+      name-color: white
+      # Name color for online players.
+      online-name-format: "<gradient:#A745FF:#cf97ff:#A745FF><name></gradient>"
+      dots-color: "#080A0F"
+      # Row colors for ranks 1, 2, 3. Every other rank uses default-rank-color.
+      rank-colors:
+        - "#fffb00"
+        - "#cfcfcf"
+        - "#d3854d"
+      default-rank-color: "#aaaaaa" # this is the legacy §7 color code in hex
+      # Total row width budget in text pixels. 225 fits the default billboard.
+      max-pixel-width: 225
+      # Names wider than this many pixels are shortened with "…".
+      max-name-pixel-width: 100

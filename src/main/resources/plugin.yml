@@ -3,8 +3,24 @@ description: $description
 version: '${version}'
 
 main: me.romix.dirtyLeaderboards.DirtyLeaderboards
-api-version: '1.21.11'
+api-version: '1.21.9'
 load: POSTWORLD
+folia-supported: false
 
-authors: [ romix_42 ]
+author: romix_42
 website: https://discord.gg/Uh7c6kAYNA
+
+softdepend:
+  - Skript
+  - PlaceholderAPI
+
+commands:
+  dirtyleaderboards:
+    description: Manage DirtyLeaderboards displays
+    aliases: [ dlb, leaderboards, dirtyboards, boards, db, dirtyboard, leaderboard, lb, dlbs ]
+    permission: dirtyleaderboards.admin
+
+permissions:
+  dirtyleaderboards.admin:
+    description: Access to all DirtyLeaderboards commands
+    default: op

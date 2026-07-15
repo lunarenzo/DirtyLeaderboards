@@ -1,0 +1,53 @@
+# In every message in this config:
+# <c1> will be replaced with the c1: color in the theme: setting
+# <c2> will be replaced with the c2: color in the theme: setting
+# <success> will be replaced with the success: color in the theme: setting
+# <error> will be replaced with the error: color in the theme: setting
+# <warning> will be replaced with the warning: color in the theme: setting
+# <prefix> will be replaced with the prefix: text
+
+# This file strictly uses mini message only.
+
+theme:
+  c1: "#A745FF" # Color 1
+  c2: "#cf97ff" # Color 2
+  success: "#92ff60" # Success / green color
+  error: "#ff6060" # Error / red color
+  warning: "#ffd263" # Warning color
+
+prefix: "<c1><bold>DirtyLeaderboards</bold> <dark_gray>┃</dark_gray> <white>" # Prefix
+# I use ┃ instead of | because my texture pack changes | to look nearly identical to :
+# It also looks a little bit slimmer, taller making it look nicer.
+
+messages:
+  no-permission: "<prefix><#fd7474>❌ ᴇʀʀᴏʀ: <error>You don't have permission to do that."
+  player-only: "<prefix><#fd7474>❌ ᴇʀʀᴏʀ: <error>Only players can use this command."
+  unknown-display: "<prefix><#fd7474>❌ ᴇʀʀᴏʀ: <error>No display named <c2><display></c2> exists."
+  no-displays: "<prefix><#fd7474>❌ ᴇʀʀᴏʀ: <error>No displays are configured. Add one to config.yml first."
+  specify-display: "<prefix><#fd7474>❌ ᴇʀʀᴏʀ: <error>Specify a display: <c2><displays></c2>"
+
+  reloaded: "<prefix><#74fd7b>✔ ꜱᴜᴄᴄᴇꜱꜱ: <success>Reloaded in <c2><time>ms</c2>."
+  reload-failed: "<prefix><#fd7474>❌ ᴇʀʀᴏʀ: <error>Reload failed, check the console for details."
+
+  display-started: "<prefix><#74fd7b>✔ ꜱᴜᴄᴄᴇꜱꜱ: <success>Display <c2><display></c2> started."
+  display-start-failed: "<prefix><#fd7474>❌ ᴇʀʀᴏʀ: <error>Display <c2><display></c2> could not start, check the console."
+  display-already-running: "<prefix><#fd7474>❌ ᴇʀʀᴏʀ: <error>Display <c2><display></c2> is already running."
+  display-stopped: "<prefix><#74fd7b>✔ ꜱᴜᴄᴄᴇꜱꜱ: <success>Display <c2><display></c2> stopped."
+  display-not-running: "<prefix><#fd7474>❌ ᴇʀʀᴏʀ: <error>Display <c2><display></c2> is not running."
+  display-skipped: "<prefix><#74fd7b>✔ ꜱᴜᴄᴄᴇꜱꜱ: <success>Display <c2><display></c2> skipped to <c2><leaderboard></c2>."
+  display-moved: "<prefix><#74fd7b>✔ ꜱᴜᴄᴄᴇꜱꜱ: <success>Display <c2><display></c2> moved to your location."
+
+  list-header: "<prefix><c2>Displays:"
+  list-entry: " <dark_gray>•</dark_gray> <white><display></white> <dark_gray>-</dark_gray> <status> <dark_gray>(<gray>showing <leaderboard></gray>)</dark_gray>"
+  list-entry-stopped: " <dark_gray>•</dark_gray> <white><display></white> <dark_gray>-</dark_gray> <status>"
+  status-running: "<success>running"
+  status-stopped: "<error>stopped"
+
+  help:
+    - "<prefix><c2>Commands:"
+    - " <c1>/dlb reload <dark_gray>-</dark_gray> <gray>Reload all configuration files"
+    - " <c1>/dlb list <dark_gray>-</dark_gray> <gray>List displays and their status"
+    - " <c1>/dlb start <display> <dark_gray>-</dark_gray> <gray>Start a display"
+    - " <c1>/dlb stop <display> <dark_gray>-</dark_gray> <gray>Stop a display"
+    - " <c1>/dlb skip <display> <dark_gray>-</dark_gray> <gray>Skip to the next leaderboard"
+    - " <c1>/dlb move <display> <dark_gray>-</dark_gray> <gray>Move a display to where you stand"

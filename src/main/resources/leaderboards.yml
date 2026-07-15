@@ -1,0 +1,84 @@
+leaderboards:
+  kills:
+    enabled: true
+    source: statistic
+    statistic: player_kills # Uses the default minecraft kills statistics. Cannot be manipulated without plugins.
+    title: "TOP KILLS"
+    title-color: "#ee2a2a"
+    value-color: "#FFD263"
+    icon: "<sprite:items:item/diamond_sword>" # Uses vanilla sprites (1.21.9+).
+    # Sprite list: https://www.gamergeeks.net/apps/minecraft/list-of-atlas-sprites/java/1.21.9
+    icon-width: 12
+    format: number
+    # Players below this value never appear.
+    # If your server is lagging (because it has 5k+ players) then *maybe* set this to a higher number
+    minimum-value: 1
+    # How long this leaderboard stays on screen before rotating (in seconds).
+    duration-seconds: 15
+
+  deaths:
+    enabled: true
+    source: statistic
+    statistic: deaths
+    title: "TOP DEATHS"
+    title-color: "#af0000"
+    value-color: "#FFD263"
+    icon: "<sprite:particles:raid_omen>"
+    icon-width: 12
+    format: number
+    minimum-value: 1
+    duration-seconds: 15
+
+  playtime:
+    enabled: true
+    source: statistic
+    statistic: play_time
+    title: "TOP PLAYTIME"
+    title-color: "#ffe344"
+    value-color: "#FFD263"
+    icon: "<sprite:items:item/clock_%frame%>" # This 'icon' is actually an animation.
+    # Icon frames define how many frames that animation has
+    # Because the 'clock' item has 63 frames, it'll render all 63
+    icon-frames: 63
+    icon-frame-period: 72000
+    icon-frame-pad: 2 # This is needed because if the item has 2 digit frames, then it will do '_05' instead of '_5' so that the frame is a valid texture
+    icon-width: 12
+    format: time # Time format is this: 5h 35m while number would show something like: 402k
+    # Again, mainly useful for optimization
+    minimum-value: 6000 # The 'play_time' statistic uses ticks, 1T = 1/20s 6000T = 300s = 5 minutes
+    duration-seconds: 15
+
+  # A custom leaderboard fed from Skript. Uncomment to use, then in Skript use this syntax:
+  #   'set leaderboard data of %player% in "points" to %number%'
+  #   Example: 'add 5 to leaderboard data of player in "points"'
+  #
+  # points:
+  #   enabled: true
+  #   source: custom
+  #   title: "TOP POINTS"
+  #   title-color: "#e372ff"
+  #   value-color: "#FFD263"
+  #   icon: "<sprite:items:item/amethyst_shard>"
+  #   icon-width: 12
+  #   format: number
+  #   minimum-value: 1
+  #   duration-seconds: 15
+
+  # A leaderboard fed by PlaceholderAPI.
+  #
+  # balance:
+  #   enabled: true
+  #   source: placeholder
+  #   placeholder: "%vault_eco_balance%"
+  #   title: "TOP BALANCE"
+  #   title-color: "#74fd7b"
+  #   value-color: "#FFD263"
+  #   icon: "<sprite:items:item/emerald>"
+  #   icon-width: 12
+  #   format: number
+  #   minimum-value: 1
+  #   duration-seconds: 15
+
+# Stored values for "source: custom" leaderboards.
+# Safe to edit by hand while the server is stopped.
+data: {}
