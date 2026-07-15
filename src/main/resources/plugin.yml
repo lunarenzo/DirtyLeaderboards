@@ -1,0 +1,10 @@
+name: DirtyLeaderboards
+description: $description
+version: '${version}'
+
+main: me.romix.dirtyLeaderboards.DirtyLeaderboards
+api-version: '1.21.11'
+load: POSTWORLD
+
+authors: [ romix_42 ]
+website: https://discord.gg/Uh7c6kAYNA
