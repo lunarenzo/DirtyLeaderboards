@@ -6,6 +6,10 @@ plugins {
 
 description = "The ultimate™ leaderboards plugin. Allows you to make modern leaderboards easily."
 
+tasks.shadowJar {
+    archiveClassifier.set("")
+}
+
 repositories {
     mavenCentral()
     maven("https://repo.papermc.io/repository/maven-public/")
