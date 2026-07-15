@@ -17,7 +17,12 @@
 [![donation](https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif)](https://www.paypal.com/donate/?hosted_button_id=KPXD92CM944RL)
 [![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/L3L71Q7HGY)
 
-<!-- TODO: drop a screenshot or gif of a display in here once one's hosted somewhere -->
+<br>
+<div align="center">
+
+![Banner](https://cdn.modrinth.com/data/cached_images/8e85c2461fca1bbe7a97c7e1bd3b186c283c6fae_0.webp)
+
+</div>
 
 # DirtyLeaderboards
 

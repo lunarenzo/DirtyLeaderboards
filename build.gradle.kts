@@ -11,12 +11,17 @@ repositories {
     maven("https://repo.papermc.io/repository/maven-public/")
     maven("https://repo.skriptlang.org/releases")
     maven("https://repo.extendedclip.com/content/repositories/placeholderapi/")
+    maven {
+        name = "faststatsReleases"
+        url = uri("https://repo.faststats.dev/releases")
+    }
 }
 
 dependencies {
     compileOnly("io.papermc.paper:paper-api:1.21.11-R0.1-SNAPSHOT")
     compileOnly("com.github.SkriptLang:Skript:2.10.2") { isTransitive = false }
     compileOnly("me.clip:placeholderapi:2.11.6")
+    implementation("dev.faststats.metrics:bukkit:0.28.0")
 }
 
 java {

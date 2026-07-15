@@ -22,6 +22,8 @@ import org.bukkit.NamespacedKey;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.plugin.java.JavaPlugin;
+import dev.faststats.bukkit.BukkitContext;
+import dev.faststats.Metrics;
 
 public final class DirtyLeaderboards extends JavaPlugin {
 
@@ -43,6 +45,11 @@ public final class DirtyLeaderboards extends JavaPlugin {
     public static DirtyLeaderboards instance() {
         return instance;
     }
+
+
+    private final BukkitContext context = new BukkitContext.Factory(this, "069eb5f6c3f863059832b61dca870ec3")
+            .metrics(Metrics.Factory::create)
+            .create();
 
     @Override
     public void onEnable() {
@@ -71,6 +78,8 @@ public final class DirtyLeaderboards extends JavaPlugin {
         }
         getServer().getScheduler().runTaskTimerAsynchronously(this, this::autosave, 600L, 600L);
         printBanner(started, skriptHooked);
+
+        context.ready();
     }
 
     @Override
@@ -85,6 +94,8 @@ public final class DirtyLeaderboards extends JavaPlugin {
             ioExecutor.shutdown();
         }
         instance = null;
+
+        context.shutdown();
     }
 
     private void loadServices() {
