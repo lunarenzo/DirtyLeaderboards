@@ -94,8 +94,7 @@ If you only have one display configured, you can leave `<display>` empty and it'
 
 ## 🧩 Skript
 
-The Skript addon registers itself automatically if Skript is present.
-
+[![SkriptHubViewTheDocs](http://skripthub.net/static/addon/ViewTheDocsButton.png)](http://skripthub.net/docs/?addon=DirtyLeaderboards)
 
 ```ruby
 # control a display

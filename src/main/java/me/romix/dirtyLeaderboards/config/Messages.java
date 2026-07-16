@@ -75,11 +75,11 @@ public final class Messages {
         to.sendMessage(msg(key, placeholders));
     }
 
-    public List<Component> help() {
+    public List<Component> help(TagResolver... placeholders) {
         List<Component> lines = new ArrayList<>();
         if (messages != null) {
             for (String raw : messages.getStringList("help")) {
-                lines.add(parse(raw));
+                lines.add(parse(raw, placeholders));
             }
         }
         return lines;

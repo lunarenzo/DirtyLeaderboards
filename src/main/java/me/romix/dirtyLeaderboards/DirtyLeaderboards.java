@@ -17,6 +17,7 @@ import me.romix.dirtyLeaderboards.leaderboard.LeaderboardRegistry;
 import me.romix.dirtyLeaderboards.leaderboard.LeaderboardType;
 import me.romix.dirtyLeaderboards.leaderboard.ScoreStore;
 import me.romix.dirtyLeaderboards.leaderboard.TopService;
+import me.romix.dirtyLeaderboards.update.UpdateChecker;
 import me.romix.dirtyLeaderboards.util.StartupBanner;
 import org.bukkit.NamespacedKey;
 import org.bukkit.OfflinePlayer;
@@ -38,6 +39,7 @@ public final class DirtyLeaderboards extends JavaPlugin {
     private ScoreStore scoreStore;
     private TopService topService;
     private DisplayManager displayManager;
+    private UpdateChecker updateChecker;
     private ExecutorService ioExecutor;
     private NamespacedKey markerKey;
     private boolean placeholderApiPresent;
@@ -77,6 +79,8 @@ public final class DirtyLeaderboards extends JavaPlugin {
             new LeaderboardPlaceholders(this).register();
         }
         getServer().getScheduler().runTaskTimerAsynchronously(this, this::autosave, 600L, 600L);
+        updateChecker = new UpdateChecker(this);
+        updateChecker.restart();
         printBanner(started, skriptHooked);
 
         context.ready();
@@ -84,6 +88,9 @@ public final class DirtyLeaderboards extends JavaPlugin {
 
     @Override
     public void onDisable() {
+        if (updateChecker != null) {
+            updateChecker.stop();
+        }
         if (displayManager != null) {
             displayManager.stopAll();
         }
@@ -137,6 +144,9 @@ public final class DirtyLeaderboards extends JavaPlugin {
             }
             loadServices();
             displayManager.startAutoStarting();
+            if (updateChecker != null) {
+                updateChecker.restart();
+            }
             return true;
         } catch (Exception e) {
             getLogger().log(Level.SEVERE, "Reload failed", e);
@@ -222,6 +232,10 @@ public final class DirtyLeaderboards extends JavaPlugin {
 
     public DisplayManager displayManager() {
         return displayManager;
+    }
+
+    public UpdateChecker updateChecker() {
+        return updateChecker;
     }
 
     public boolean placeholderApiPresent() {

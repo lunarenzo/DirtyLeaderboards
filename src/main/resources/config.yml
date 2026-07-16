@@ -9,6 +9,13 @@ settings:
   # uses "source: placeholder". Lower = slower scans, less main-thread work.
   placeholder-players-per-tick: 200
 
+update-checker:
+  # Checks Modrinth for new releases.
+  # Recommended to keep it enabled.
+  enabled: true
+  # How often to check for updates, in hours.
+  check-interval-hours: 12
+
 formatting:
   numbers:
     # Thousands separator for full numbers, e.g. 9,999.

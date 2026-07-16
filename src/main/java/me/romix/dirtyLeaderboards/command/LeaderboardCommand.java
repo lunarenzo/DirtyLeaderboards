@@ -7,7 +7,10 @@ import me.romix.dirtyLeaderboards.DirtyLeaderboards;
 import me.romix.dirtyLeaderboards.config.Messages;
 import me.romix.dirtyLeaderboards.display.DisplayManager;
 import me.romix.dirtyLeaderboards.display.LeaderboardDisplay;
+import me.romix.dirtyLeaderboards.update.UpdateChecker;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.event.ClickEvent;
+import net.kyori.adventure.text.event.HoverEvent;
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -45,9 +48,23 @@ public final class LeaderboardCommand implements TabExecutor {
     }
 
     private void help(CommandSender sender) {
-        for (Component line : plugin.messages().help()) {
+        Messages messages = plugin.messages();
+        String current = plugin.getPluginMeta().getVersion();
+        for (Component line : messages.help(Placeholder.unparsed("version", current))) {
             sender.sendMessage(line);
         }
+        UpdateChecker checker = plugin.updateChecker();
+        String latest = checker == null ? null : checker.availableVersion();
+        if (latest == null) {
+            return;
+        }
+        messages.send(sender, "update-available",
+                Placeholder.unparsed("current", current),
+                Placeholder.unparsed("latest", latest));
+        Component link = messages.msg("update-link", Placeholder.unparsed("url", checker.downloadUrl()))
+                .hoverEvent(HoverEvent.showText(messages.msg("update-link-hover")))
+                .clickEvent(ClickEvent.openUrl(checker.downloadUrl()));
+        sender.sendMessage(link);
     }
 
     private void reload(CommandSender sender) {

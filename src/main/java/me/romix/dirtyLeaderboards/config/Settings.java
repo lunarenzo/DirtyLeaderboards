@@ -30,17 +30,22 @@ public final class Settings {
     private final long cacheMillis;
     private final List<String> excludedNamePrefixes;
     private final int placeholderPlayersPerTick;
+    private final boolean updateCheckerEnabled;
+    private final long updateCheckIntervalTicks;
     private final NumberFormatter numberFormatter;
     private final TimeFormatter timeFormatter;
     private final Map<String, DisplayConfig> displays;
     private final List<String> warnings;
 
     private Settings(long cacheMillis, List<String> excludedNamePrefixes, int placeholderPlayersPerTick,
+                     boolean updateCheckerEnabled, long updateCheckIntervalTicks,
                      NumberFormatter numberFormatter, TimeFormatter timeFormatter,
                      Map<String, DisplayConfig> displays, List<String> warnings) {
         this.cacheMillis = cacheMillis;
         this.excludedNamePrefixes = excludedNamePrefixes;
         this.placeholderPlayersPerTick = placeholderPlayersPerTick;
+        this.updateCheckerEnabled = updateCheckerEnabled;
+        this.updateCheckIntervalTicks = updateCheckIntervalTicks;
         this.numberFormatter = numberFormatter;
         this.timeFormatter = timeFormatter;
         this.displays = displays;
@@ -52,6 +57,9 @@ public final class Settings {
         long cacheMillis = Math.max(1, config.getInt("settings.cache-seconds", 30)) * 1000L;
         List<String> prefixes = List.copyOf(config.getStringList("settings.excluded-name-prefixes"));
         int perTick = Math.max(1, config.getInt("settings.placeholder-players-per-tick", 200));
+        boolean updateCheckerEnabled = config.getBoolean("update-checker.enabled", true);
+        double intervalHours = Math.max(0.25, config.getDouble("update-checker.check-interval-hours", 12.0));
+        long updateCheckIntervalTicks = (long) (intervalHours * 3600.0 * 20.0);
         NumberFormatter numberFormatter = new NumberFormatter(
                 config.getString("formatting.numbers.grouping", ","),
                 config.getLong("formatting.numbers.compact-from", 10000L),
@@ -71,7 +79,8 @@ public final class Settings {
                 displays.put(id, loadDisplay(id, section, warnings));
             }
         }
-        return new Settings(cacheMillis, prefixes, perTick, numberFormatter, timeFormatter, displays, warnings);
+        return new Settings(cacheMillis, prefixes, perTick, updateCheckerEnabled, updateCheckIntervalTicks,
+                numberFormatter, timeFormatter, displays, warnings);
     }
 
     private static List<TimeFormatter.Unit> loadTimeUnits(FileConfiguration config) {
@@ -191,6 +200,14 @@ public final class Settings {
 
     public int placeholderPlayersPerTick() {
         return placeholderPlayersPerTick;
+    }
+
+    public boolean updateCheckerEnabled() {
+        return updateCheckerEnabled;
+    }
+
+    public long updateCheckIntervalTicks() {
+        return updateCheckIntervalTicks;
     }
 
     public String formatValue(LeaderboardType type, double value) {

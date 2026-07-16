@@ -17,7 +17,7 @@ softdepend:
 commands:
   dirtyleaderboards:
     description: Manage DirtyLeaderboards displays
-    aliases: [ dlb, leaderboards, dirtyboards, boards, db, dirtyboard, leaderboard, lb, dlbs ]
+    aliases: [ dlb, dirtyleaderboard, leaderboards, dirtyboards, boards, db, dirtyboard, leaderboard, lb, dlbs ]
     permission: dirtyleaderboards.admin
 
 permissions:
