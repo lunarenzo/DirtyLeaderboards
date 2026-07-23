@@ -11,6 +11,9 @@ import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.minimessage.MiniMessage;
+import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
+import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
+import net.kyori.adventure.text.object.ObjectContents;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 
@@ -40,7 +43,9 @@ public final class RowRenderer {
             online = false;
         }
         name = truncate(sanitize(name));
-        String headId = online || player.hasPlayedBefore() ? entry.uuid().toString() : STEVE_HEAD;
+        Component head = online || player.hasPlayedBefore()
+                ? Component.object(ObjectContents.playerHead(entry.uuid()))
+                : parse("<head:" + STEVE_HEAD + ":true>");
         String nameTag = online
                 ? style.onlineNameFormat().replace("<name>", name)
                 : "<" + style.nameColor() + ">" + name;
@@ -51,7 +56,8 @@ public final class RowRenderer {
         int rightLength = 1 + PixelWidth.of(value) + type.iconWidth();
 
         Component left = parse("<color:" + style.rankColor(rank) + ">" + glyph
-                + "</color> <head:" + headId + ":true> " + nameTag);
+                        + "</color> <player_head> " + nameTag,
+                Placeholder.component("player_head", head));
         Component middle = parse("<color:" + style.dotsColor() + "><shadow:" + style.dotsColor() + ":0>"
                 + dots(leftLength, rightLength));
         Component right = parse("<color:" + type.valueColor() + ">" + value + " <white>" + type.icon(entry.value()));
@@ -118,11 +124,11 @@ public final class RowRenderer {
         return name.replace("<", "").replace(">", "");
     }
 
-    private Component parse(String raw) {
+    private Component parse(String raw, TagResolver... resolvers) {
         try {
-            return mini.deserialize(raw);
+            return mini.deserialize(raw, resolvers);
         } catch (Exception e) {
-            return Component.text(mini.stripTags(raw));
+            return Component.text(mini.stripTags(raw, resolvers));
         }
     }
 }

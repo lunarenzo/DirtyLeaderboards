@@ -174,13 +174,7 @@ public final class LeaderboardDisplay {
         if (!isRunning()) {
             return null;
         }
-        // Start the exit animation now (rows need EXIT_TICKS - 2 = 12 ticks to fully despawn),
-        // and hold beginCycle() off for EXIT_OFFSET_FROM_END = 14 ticks so it has that runway
-        // before new rows spawn - the same margin a natural end-of-cycle transition gets.
-        // cycleStartTick has to move back in lockstep with cycleTick: row.exitStart is compared
-        // against the raw tickCounter, so if cycleTick alone is fast-forwarded the exit timing
-        // and the cycle-end timing fall out of sync - old rows end up anchored to the original,
-        // untouched cycleStartTick and don't finish exiting until nearly a full cycle later.
+
         for (Row row : activeRows) {
             row.exitStart = Math.min(row.exitStart, tickCounter);
         }
