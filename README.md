@@ -154,9 +154,15 @@ leaderboards:
     icon: "<sprite:items:item/diamond_sword>"
     icon-width: 12
     format: number
+    sorting: descending
     minimum-value: 1
     duration-seconds: 15
 ```
+
+`sorting` defaults to `descending` (highest value ranks first) and also accepts `ascending`, which ranks
+the lowest value first instead - handy for leaderboards like fastest map completion time or fewest
+deaths. `minimum-value` is still a hard floor either way, so lower it (e.g. to `0`) if a low value
+should be allowed to qualify as the best score.
 ---
 <div align="center">
 

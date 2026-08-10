@@ -10,7 +10,11 @@ leaderboards:
     # Sprite list: https://www.gamergeeks.net/apps/minecraft/list-of-atlas-sprites/java/1.21.9
     icon-width: 12
     format: number
-    # Players below this value never appear.
+    # 'descending' ranks the highest value first (e.g. most kills). Use 'ascending' when a lower
+    # value should rank first instead, like a fastest completion time or a fewest-deaths board.
+    sorting: descending
+    # Players below this value never appear. This still applies with 'sorting: ascending', so lower
+    # it (even to a negative number) if a low value like 0 should be allowed to qualify.
     # If your server is lagging (because it has 5k+ players) then *maybe* set this to a higher number
     minimum-value: 1
     # How long this leaderboard stays on screen before rotating (in seconds).
@@ -26,6 +30,7 @@ leaderboards:
     icon: "<sprite:particles:raid_omen>"
     icon-width: 12
     format: number
+    sorting: descending
     minimum-value: 1
     duration-seconds: 15
 
@@ -44,9 +49,28 @@ leaderboards:
     icon-frame-pad: 2 # This is needed because if the item has 2 digit frames, then it will do '_05' instead of '_5' so that the frame is a valid texture
     icon-width: 12
     format: time # Time format is this: 5h 35m while number would show something like: 402k
+    sorting: descending
     # Again, mainly useful for optimization
     minimum-value: 6000 # The 'play_time' statistic uses ticks, 1T = 1/20s 6000T = 300s = 5 minutes
     duration-seconds: 15
+
+  # An ascending leaderboard - the lowest value ranks first. Useful for boards like fastest map
+  # completion time or fewest deaths. Uncomment to use.
+  #
+  # fewest_deaths:
+  #   enabled: true
+  #   source: statistic
+  #   statistic: deaths
+  #   title: "FEWEST DEATHS"
+  #   title-color: "#7bff9e"
+  #   value-color: "#FFD263"
+  #   icon: "<sprite:particles:raid_omen>"
+  #   icon-width: 12
+  #   format: number
+  #   sorting: ascending
+  #   # 0 is the best possible score here, so it must not be filtered out.
+  #   minimum-value: 0
+  #   duration-seconds: 15
 
   # A custom leaderboard fed from Skript. Uncomment to use, then in Skript use this syntax:
   #   'set leaderboard data of %player% in "points" to %number%'
@@ -61,6 +85,7 @@ leaderboards:
   #   icon: "<sprite:items:item/amethyst_shard>"
   #   icon-width: 12
   #   format: number
+  #   sorting: descending
   #   minimum-value: 1
   #   duration-seconds: 15
 
@@ -76,6 +101,7 @@ leaderboards:
   #   icon: "<sprite:items:item/emerald>"
   #   icon-width: 12
   #   format: number
+  #   sorting: descending
   #   minimum-value: 1
   #   duration-seconds: 15
 

@@ -9,6 +9,7 @@ public record LeaderboardType(
         String statisticJsonKey,
         String placeholder,
         ValueFormat format,
+        SortOrder sortOrder,
         double minimumValue,
         String title,
         String titleColor,

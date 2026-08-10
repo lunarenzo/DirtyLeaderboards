@@ -95,14 +95,22 @@ public final class TopService {
     }
 
     private List<TopEntry> select(LeaderboardType type, Map<UUID, Double> values) {
-        PriorityQueue<TopEntry> best = new PriorityQueue<>(Comparator.comparingDouble(TopEntry::value));
+        boolean ascending = type.sortOrder() == SortOrder.ASCENDING;
+        Comparator<TopEntry> worstFirst = Comparator.comparingDouble(TopEntry::value);
+        if (ascending) {
+            worstFirst = worstFirst.reversed();
+        }
+        PriorityQueue<TopEntry> best = new PriorityQueue<>(worstFirst);
         for (Map.Entry<UUID, Double> entry : values.entrySet()) {
             double value = entry.getValue();
             if (value < type.minimumValue()) {
                 continue;
             }
-            if (best.size() >= TOP_SIZE && value <= best.peek().value()) {
-                continue;
+            if (best.size() >= TOP_SIZE) {
+                double worstKept = best.peek().value();
+                if (ascending ? value >= worstKept : value <= worstKept) {
+                    continue;
+                }
             }
             String name = Bukkit.getOfflinePlayer(entry.getKey()).getName();
             if (isExcluded(name)) {
@@ -114,7 +122,7 @@ public final class TopService {
             }
         }
         List<TopEntry> entries = new ArrayList<>(best);
-        entries.sort(Comparator.comparingDouble(TopEntry::value).reversed());
+        entries.sort(worstFirst.reversed());
         return List.copyOf(entries);
     }
 

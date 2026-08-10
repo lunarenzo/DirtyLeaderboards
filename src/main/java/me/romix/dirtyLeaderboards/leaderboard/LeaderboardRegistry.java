@@ -84,6 +84,12 @@ public final class LeaderboardRegistry {
                     + entry.getString("format") + "', using 'number'");
             format = ValueFormat.NUMBER;
         }
+        SortOrder sortOrder = SortOrder.parse(entry.getString("sorting", "descending"));
+        if (sortOrder == null) {
+            warnings.add("leaderboard '" + id + "' has an invalid sorting '"
+                    + entry.getString("sorting") + "' (ascending or descending), using 'descending'");
+            sortOrder = SortOrder.DESCENDING;
+        }
         int durationSeconds = entry.getInt("duration-seconds", 15);
         if (durationSeconds < 3) {
             warnings.add("leaderboard '" + id + "' duration-seconds must be at least 3, clamped");
@@ -96,6 +102,7 @@ public final class LeaderboardRegistry {
                 jsonKey,
                 placeholder,
                 format,
+                sortOrder,
                 entry.getDouble("minimum-value", 1),
                 entry.getString("title", id.toUpperCase(Locale.ROOT)),
                 entry.getString("title-color", "#ffffff"),
