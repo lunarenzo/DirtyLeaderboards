@@ -64,9 +64,11 @@ public final class Settings {
                 config.getString("formatting.numbers.grouping", ","),
                 config.getLong("formatting.numbers.compact-from", 10000L),
                 config.getStringList("formatting.numbers.compact-suffixes"));
+        int maxTimeUnits = Math.max(1, config.getInt("formatting.time.max-units", 2));
         TimeFormatter timeFormatter = new TimeFormatter(
                 loadTimeUnits(config),
-                config.getString("formatting.time.separator", ", "));
+                config.getString("formatting.time.separator", ", "),
+                maxTimeUnits);
         Map<String, DisplayConfig> displays = new LinkedHashMap<>();
         ConfigurationSection displaysSection = config.getConfigurationSection("displays");
         if (displaysSection != null) {
@@ -146,12 +148,15 @@ public final class Settings {
         if (section == null) {
             return new DisplayConfig.ProgressBar(true,
                     blockData(id, "gray_concrete", "gray_concrete", warnings),
-                    blockData(id, "white_concrete", "white_concrete", warnings));
+                    blockData(id, "white_concrete", "white_concrete", warnings),
+                    4.0, 0.05);
         }
         return new DisplayConfig.ProgressBar(
                 section.getBoolean("enabled", true),
                 blockData(id, section.getString("background-block", "gray_concrete"), "gray_concrete", warnings),
-                blockData(id, section.getString("foreground-block", "white_concrete"), "white_concrete", warnings)
+                blockData(id, section.getString("foreground-block", "white_concrete"), "white_concrete", warnings),
+                section.getDouble("length", 4.0),
+                section.getDouble("width", 0.05)
         );
     }
 

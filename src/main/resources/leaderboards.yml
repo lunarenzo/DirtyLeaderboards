@@ -19,6 +19,9 @@ leaderboards:
     minimum-value: 1
     # How long this leaderboard stays on screen before rotating (in seconds).
     duration-seconds: 15
+    # Per-leaderboard progress bar overrides. Omit to use the display defaults from config.yml.
+    # progress-bar-length: 4.0
+    # progress-bar-width: 0.05
 
   deaths:
     enabled: true
@@ -33,6 +36,8 @@ leaderboards:
     sorting: descending
     minimum-value: 1
     duration-seconds: 15
+    # progress-bar-length: 4.0
+    # progress-bar-width: 0.05
 
   playtime:
     enabled: true
@@ -53,6 +58,8 @@ leaderboards:
     # Again, mainly useful for optimization
     minimum-value: 6000 # The 'play_time' statistic uses ticks, 1T = 1/20s 6000T = 300s = 5 minutes
     duration-seconds: 15
+    # progress-bar-length: 4.0
+    # progress-bar-width: 0.05
 
   # An ascending leaderboard - the lowest value ranks first. Useful for boards like fastest map
   # completion time or fewest deaths. Uncomment to use.

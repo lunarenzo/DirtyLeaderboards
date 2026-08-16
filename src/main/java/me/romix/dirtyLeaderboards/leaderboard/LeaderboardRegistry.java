@@ -112,7 +112,9 @@ public final class LeaderboardRegistry {
                 entry.getLong("icon-frame-period", 72000L),
                 Math.max(1, entry.getInt("icon-frame-pad", 1)),
                 Math.max(0, entry.getInt("icon-width", 12)),
-                durationSeconds * 20
+                durationSeconds * 20,
+                entry.getDouble("progress-bar-length", 0),
+                entry.getDouble("progress-bar-width", 0)
         );
     }
 

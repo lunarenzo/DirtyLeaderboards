@@ -26,6 +26,8 @@ formatting:
   time:
     # Time values show the two largest units, e.g. "4d, 3h" or "1w, 6d".
     separator: ", "
+    # How many units of time to display. Default is 2 (e.g. "4d, 3h"). Set to 3 for "4d, 3h, 12m".
+    max-units: 2
     # Remove a line to skip that unit entirely (e.g. delete "week" to always use days).
     units:
       month: mo
@@ -64,6 +66,9 @@ displays:
       enabled: true
       background-block: gray_concrete
       foreground-block: white_concrete
+      # Length (horizontal extent) and width (vertical thickness) of the progress bar.
+      length: 4.0
+      width: 0.05
     style:
       # Name color for offline players.
       name-color: white

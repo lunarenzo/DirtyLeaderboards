@@ -19,7 +19,9 @@ public record LeaderboardType(
         long iconFramePeriod,
         int iconFramePad,
         int iconWidth,
-        int durationTicks
+        int durationTicks,
+        double progressBarLength,
+        double progressBarWidth
 ) {
 
     private static final String FRAME_TOKEN = "%frame%";

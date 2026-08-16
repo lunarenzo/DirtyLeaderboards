@@ -34,7 +34,9 @@ public record DisplayConfig(
     public record ProgressBar(
             boolean enabled,
             BlockData background,
-            BlockData foreground
+            BlockData foreground,
+            double length,
+            double width
     ) {
     }
 

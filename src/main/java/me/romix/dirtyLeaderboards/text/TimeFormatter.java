@@ -10,12 +10,14 @@ public final class TimeFormatter {
 
     private final List<Unit> units;
     private final String separator;
+    private final int maxUnits;
 
-    public TimeFormatter(List<Unit> units, String separator) {
+    public TimeFormatter(List<Unit> units, String separator, int maxUnits) {
         List<Unit> sorted = new ArrayList<>(units);
         sorted.sort((a, b) -> Long.compare(b.seconds(), a.seconds()));
         this.units = List.copyOf(sorted);
         this.separator = separator;
+        this.maxUnits = Math.max(1, maxUnits);
     }
 
     public String formatTicks(long ticks) {
@@ -46,14 +48,18 @@ public final class TimeFormatter {
         Unit unit = units.get(primary);
         long count = value / unit.seconds();
         long remainder = value % unit.seconds();
-        String result = count + unit.suffix();
-        if (primary + 1 < units.size()) {
-            Unit next = units.get(primary + 1);
+        StringBuilder result = new StringBuilder();
+        result.append(count).append(unit.suffix());
+        int shown = 1;
+        for (int i = primary + 1; i < units.size() && shown < maxUnits; i++) {
+            Unit next = units.get(i);
             long nextCount = remainder / next.seconds();
             if (nextCount > 0) {
-                result += separator + nextCount + next.suffix();
+                result.append(separator).append(nextCount).append(next.suffix());
+                remainder %= next.seconds();
+                shown++;
             }
         }
-        return result;
+        return result.toString();
     }
 }

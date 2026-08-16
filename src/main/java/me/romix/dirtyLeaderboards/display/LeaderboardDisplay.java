@@ -266,17 +266,24 @@ public final class LeaderboardDisplay {
         if (!config.progressBar().enabled() || invalid(progressForeground)) {
             return;
         }
+        float length = effectiveBarLength();
+        float width = effectiveBarWidth();
         progressForeground.setInterpolationDelay(0);
         progressForeground.setInterpolationDuration(0);
-        progressForeground.setTransformation(transformation(-2, 0, 0.025f, 0, 0.05f, 0.025f));
+        progressForeground.setTransformation(transformation(length / -2f, 0, 0.025f, 0, width, 0.025f));
+        if (!invalid(progressBackground)) {
+            progressBackground.setTransformation(transformation(length / -2f, 0, 0, length, width, 0.025f));
+        }
     }
 
     private void animateProgress() {
         if (!config.progressBar().enabled() || invalid(progressForeground) || cycleTick < 1) {
             return;
         }
+        float length = effectiveBarLength();
+        float width = effectiveBarWidth();
         float progress = Math.min(1f, cycleTick / (float) current.durationTicks());
-        progressForeground.setTransformation(transformation(-2, 0, 0.025f, progress * 4f, 0.05f, 0.025f));
+        progressForeground.setTransformation(transformation(length / -2f, 0, 0.025f, progress * length, width, 0.025f));
         progressForeground.setInterpolationDelay(0);
         progressForeground.setInterpolationDuration(3);
     }
@@ -334,6 +341,20 @@ public final class LeaderboardDisplay {
         row.entity.setInterpolationDuration(1);
     }
 
+    private float effectiveBarLength() {
+        if (current != null && current.progressBarLength() > 0) {
+            return (float) current.progressBarLength();
+        }
+        return (float) config.progressBar().length();
+    }
+
+    private float effectiveBarWidth() {
+        if (current != null && current.progressBarWidth() > 0) {
+            return (float) current.progressBarWidth();
+        }
+        return (float) config.progressBar().width();
+    }
+
     private int exitOffset() {
         return current.durationTicks() - EXIT_OFFSET_FROM_END;
     }
@@ -357,14 +378,16 @@ public final class LeaderboardDisplay {
             });
         }
         if (config.progressBar().enabled()) {
+            float length = (float) config.progressBar().length();
+            float width = (float) config.progressBar().width();
             Location barLocation = base.clone().add(0, 2.5, 0);
             progressBackground = spawnDisplay(BlockDisplay.class, barLocation, display -> {
                 display.setBlock(config.progressBar().background());
-                display.setTransformation(transformation(-2, 0, 0, 4, 0.05f, 0.025f));
+                display.setTransformation(transformation(length / -2f, 0, 0, length, width, 0.025f));
             });
             progressForeground = spawnDisplay(BlockDisplay.class, barLocation, display -> {
                 display.setBlock(config.progressBar().foreground());
-                display.setTransformation(transformation(-2, 0, 0.025f, 0, 0.05f, 0.025f));
+                display.setTransformation(transformation(length / -2f, 0, 0.025f, 0, width, 0.025f));
             });
         }
     }
