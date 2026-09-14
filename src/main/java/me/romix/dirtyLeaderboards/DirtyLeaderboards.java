@@ -18,6 +18,7 @@ import me.romix.dirtyLeaderboards.leaderboard.LeaderboardType;
 import me.romix.dirtyLeaderboards.leaderboard.ScoreStore;
 import me.romix.dirtyLeaderboards.leaderboard.TopService;
 import me.romix.dirtyLeaderboards.update.UpdateChecker;
+import me.romix.dirtyLeaderboards.util.StartupBanner;
 import me.romix.dirtyLeaderboards.wand.WandListener;
 import me.romix.dirtyLeaderboards.wand.WandManager;
 import org.bukkit.NamespacedKey;
