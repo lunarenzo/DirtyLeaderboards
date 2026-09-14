@@ -95,3 +95,8 @@ displays:
       progress-bar-y-ratio: 0.74
       rows-top-y-ratio: 0.65
       row-spacing-ratio: 0.055
+      # Placeholder name for real entries whose player name cannot be resolved.
+      unknown-player-name: "Player"
+      # Display strings for unpopulated filler rows (empty ranks 1-10).
+      filler-player-name: "Player"
+      filler-value: "0"

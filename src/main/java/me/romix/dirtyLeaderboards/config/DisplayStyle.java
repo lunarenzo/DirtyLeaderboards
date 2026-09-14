@@ -18,7 +18,10 @@ public record DisplayStyle(
         double titleYRatio,
         double progressBarYRatio,
         double rowsTopYRatio,
-        double rowSpacingRatio
+        double rowSpacingRatio,
+        String unknownPlayerName,
+        String fillerPlayerName,
+        String fillerValue
 ) {
 
     public String rankColor(int rank) {

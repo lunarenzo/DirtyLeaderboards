@@ -188,7 +188,10 @@ public final class Settings {
                 section.getDouble("title-y-ratio", 0.84),
                 section.getDouble("progress-bar-y-ratio", 0.74),
                 section.getDouble("rows-top-y-ratio", 0.65),
-                section.getDouble("row-spacing-ratio", 0.055)
+                section.getDouble("row-spacing-ratio", 0.055),
+                section.getString("unknown-player-name", "Player"),
+                section.getString("filler-player-name", "Player"),
+                section.getString("filler-value", "0")
         );
     }
 

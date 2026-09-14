@@ -43,7 +43,7 @@ public final class RowRenderer {
         boolean online = player.isOnline();
         String name = entry.name();
         if (name == null || name.isBlank()) {
-            name = "Player";
+            name = style.unknownPlayerName();
             online = false;
         }
         name = truncate(sanitize(name), maxNamePixelWidth);
@@ -74,13 +74,15 @@ public final class RowRenderer {
 
     public Component fillerRow(LeaderboardType type, int rank, int maxPixelWidth) {
         String glyph = rankEmoji(rank);
-        int leftLength = PixelWidth.of(glyph) + 3 + style.headSpriteWidth() + PixelWidth.of("Player") - 1;
-        int rightLength = 1 + PixelWidth.of("0") + type.iconWidth();
+        String name = style.fillerPlayerName();
+        String value = style.fillerValue();
+        int leftLength = PixelWidth.of(glyph) + 3 + style.headSpriteWidth() + PixelWidth.of(name) - 1;
+        int rightLength = 1 + PixelWidth.of(value) + type.iconWidth();
 
         Component left = parse("<color:" + style.defaultRankColor() + ">" + glyph
-                + "</color> <head:" + STEVE_HEAD + ":true> <" + FILLER_COLOR + ">Player");
+                + "</color> <head:" + STEVE_HEAD + ":true> <" + FILLER_COLOR + ">" + name);
         Component middle = parse("<color:" + style.dotsColor() + ">" + dots(leftLength, rightLength, maxPixelWidth));
-        Component right = parse("<" + FILLER_COLOR + ">0");
+        Component right = parse("<" + FILLER_COLOR + ">" + value);
         return Component.textOfChildren(left, middle, right);
     }
 
