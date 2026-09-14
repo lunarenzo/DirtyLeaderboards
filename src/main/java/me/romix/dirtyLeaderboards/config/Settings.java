@@ -181,7 +181,15 @@ public final class Settings {
                 section.getInt("max-pixel-width", 225),
                 section.getInt("max-name-pixel-width", 100),
                 maxTitlePixelWidth,
-                section.getInt("head-sprite-width", 8)
+                section.getInt("head-sprite-width", 8),
+                section.getInt("max-middle-dots", 25),
+                section.getDouble("title-scale", 1.0),
+                section.getDouble("row-scale", 1.0),
+                section.getDouble("margin-percent", 0.15),
+                section.getDouble("title-y-ratio", 0.84),
+                section.getDouble("progress-bar-y-ratio", 0.74),
+                section.getDouble("rows-top-y-ratio", 0.65),
+                section.getDouble("row-spacing-ratio", 0.055)
         );
     }
 

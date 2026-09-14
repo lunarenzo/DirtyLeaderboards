@@ -11,7 +11,15 @@ public record DisplayStyle(
         int maxPixelWidth,
         int maxNamePixelWidth,
         int maxTitlePixelWidth,
-        int headSpriteWidth
+        int headSpriteWidth,
+        int maxMiddleDots,
+        double titleScaleMultiplier,
+        double rowScaleMultiplier,
+        double marginPercent,
+        double titleYRatio,
+        double progressBarYRatio,
+        double rowsTopYRatio,
+        double rowSpacingRatio
 ) {
 
     public String rankColor(int rank) {

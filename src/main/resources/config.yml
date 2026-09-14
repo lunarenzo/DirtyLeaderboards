@@ -81,7 +81,17 @@ displays:
         - "#cfcfcf"
         - "#d3854d"
       default-rank-color: "#aaaaaa" # this is the legacy §7 color code in hex
-      # Total row width budget in text pixels. 225 fits the default billboard.
-      max-pixel-width: 225
+      # Maximum number of dots in the middle separator between player name and score.
+      max-middle-dots: 25
       # Names wider than this many pixels are shortened with "…".
       max-name-pixel-width: 100
+      # Multipliers for title and row text sizes (1.0 = default balanced size).
+      title-scale: 1.0
+      row-scale: 1.0
+      # Percentage of side margins (0.15 = 15% margin on both left and right edges).
+      margin-percent: 0.15
+      # Vertical position ratios relative to billboard height (0.0 = bottom, 1.0 = top).
+      title-y-ratio: 0.84
+      progress-bar-y-ratio: 0.74
+      rows-top-y-ratio: 0.65
+      row-spacing-ratio: 0.055

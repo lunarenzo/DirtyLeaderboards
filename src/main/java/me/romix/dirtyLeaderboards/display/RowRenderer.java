@@ -22,7 +22,7 @@ public final class RowRenderer {
     private static final String RANK_EMOJIS = "①②③④⑤⑥⑦⑧⑨⑩";
     private static final String STEVE_HEAD = "entity/player/wide/steve";
     private static final String FILLER_COLOR = "#777777";
-    private static final double BASE_TITLE_SCALE = 2.5;
+    private static final double BASE_TITLE_SCALE = 1.8;
 
     private final MiniMessage mini = MiniMessage.miniMessage();
     private final Settings settings;
@@ -95,21 +95,21 @@ public final class RowRenderer {
     }
 
     public double titleScale(LeaderboardType type) {
-        return titleScale(type, 1.0);
+        return titleScale(type, style.titleScaleMultiplier());
     }
 
-    public double titleScale(LeaderboardType type, double layoutScale) {
+    public double titleScale(LeaderboardType type, double titleScaleMultiplier) {
         double fullWidth = type.iconWidth() + PixelWidth.of(" " + type.title());
-        double baseScale = BASE_TITLE_SCALE * layoutScale;
-        if (fullWidth > style.maxTitlePixelWidth() * layoutScale) {
-            return baseScale * (style.maxTitlePixelWidth() * layoutScale) / fullWidth;
+        double baseScale = BASE_TITLE_SCALE * titleScaleMultiplier;
+        if (fullWidth > style.maxTitlePixelWidth()) {
+            return baseScale * style.maxTitlePixelWidth() / fullWidth;
         }
         return baseScale;
     }
 
     private String dots(int leftLength, int rightLength, int maxPixelWidth) {
         int available = maxPixelWidth - (leftLength + rightLength + 2);
-        int count = Math.max(0, available / 2 - 1);
+        int count = Math.min(style.maxMiddleDots(), Math.max(0, available / 2 - 1));
         return ".".repeat(count);
     }
 

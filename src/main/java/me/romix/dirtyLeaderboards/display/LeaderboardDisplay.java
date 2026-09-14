@@ -206,7 +206,7 @@ public final class LeaderboardDisplay {
         spawnedRows = 0;
         typedChars = 0;
         generation++;
-        titleScale = renderer.titleScale(current, layoutScale());
+        titleScale = renderer.titleScale(current);
         titleText = " " + current.title();
         titleComponent = renderer.titleBase(current);
         resetTitle();
@@ -229,7 +229,7 @@ public final class LeaderboardDisplay {
 
     private void resetTitle() {
         double titleY = config.billboard().enabled()
-                ? config.billboard().bottomOffset() + config.billboard().height() * 0.73
+                ? config.billboard().bottomOffset() + config.billboard().height() * config.style().titleYRatio()
                 : 2.7;
         if (invalid(title)) {
             title = spawnDisplay(TextDisplay.class, base.clone().add(0, titleY, 0), display -> {
@@ -237,7 +237,7 @@ public final class LeaderboardDisplay {
                 display.setShadowed(true);
             });
         }
-        float scale = (float) (2.0 * layoutScale());
+        float scale = (float) titleScale;
         title.setInterpolationDelay(0);
         title.setInterpolationDuration(0);
         title.setTransformation(transformation(0, 0, 0, scale, scale, scale));
@@ -249,7 +249,7 @@ public final class LeaderboardDisplay {
             return;
         }
         if (cycleTick == 2) {
-            applyTitleTransform((float) (titleScale * 1.4), (float) (-0.12 * layoutScale()));
+            applyTitleTransform((float) (titleScale * 1.3), -0.08f);
         } else if (cycleTick == 6) {
             applyTitleTransform((float) titleScale, 0f);
         }
@@ -303,30 +303,30 @@ public final class LeaderboardDisplay {
         spawnedRows++;
         int rank = spawnedRows;
         int maxPix = effectiveMaxPixelWidth();
-        int maxNamePix = effectiveMaxNamePixelWidth();
+        int maxNamePix = config.style().maxNamePixelWidth();
         Component text = rank <= entries.size()
                 ? renderer.realRow(current, entries.get(rank - 1), rank, maxPix, maxNamePix)
                 : renderer.fillerRow(current, rank, maxPix);
         double startY = config.billboard().enabled()
-                ? config.billboard().bottomOffset() + config.billboard().height() * 0.65
+                ? config.billboard().bottomOffset() + config.billboard().height() * config.style().rowsTopYRatio()
                 : 2.4;
-        double stepY = 0.25 * heightRatio();
+        double stepY = config.billboard().enabled()
+                ? config.billboard().height() * config.style().rowSpacingRatio()
+                : 0.25;
         Location location = base.clone().add(0, startY - rank * stepY, 0);
-        float rowScale = (float) (0.8 * layoutScale());
-        float xOffset = (float) (-0.6 * layoutScale());
+        float rowScale = (float) (0.75 * config.style().rowScaleMultiplier());
         TextDisplay row = spawnDisplay(TextDisplay.class, location, display -> {
             display.setLineWidth(maxPix);
             display.setBackgroundColor(TRANSPARENT);
             display.setShadowed(true);
             display.text(text);
-            display.setTransformation(transformation(xOffset, 0, 0, rowScale, rowScale, rowScale));
+            display.setTransformation(transformation(0, 0, 0, rowScale, rowScale, rowScale));
         });
         activeRows.add(new Row(row, exitStart + (rank - 1)));
     }
 
     private void advanceRows() {
         Iterator<Row> iterator = activeRows.iterator();
-        double scale = layoutScale();
         while (iterator.hasNext()) {
             Row row = iterator.next();
             if (invalid(row.entity)) {
@@ -335,7 +335,7 @@ public final class LeaderboardDisplay {
             }
             if (tickCounter >= row.exitStart) {
                 row.exitProgress++;
-                applyRowTransform(row, (float) (Easing.inCubic(row.exitProgress / 12.0) * 0.7 * scale));
+                applyRowTransform(row, (float) (Easing.inCubic(row.exitProgress / 12.0) * 0.5));
                 if (row.exitProgress >= EXIT_TICKS) {
                     row.entity.remove();
                     iterator.remove();
@@ -343,36 +343,25 @@ public final class LeaderboardDisplay {
             } else if (row.slideProgress < SLIDE_TICKS) {
                 row.slideProgress++;
                 applyRowTransform(row,
-                        (float) (Easing.outCubic(row.slideProgress / (double) SLIDE_TICKS) * 0.6 * scale - 0.6 * scale));
+                        (float) (Easing.outCubic(row.slideProgress / (double) SLIDE_TICKS) * 0.5 - 0.5));
             }
         }
     }
 
     private void applyRowTransform(Row row, float x) {
-        float rowScale = (float) (0.8 * layoutScale());
+        float rowScale = (float) (0.75 * config.style().rowScaleMultiplier());
         row.entity.setTransformation(transformation(x, 0, 0, rowScale, rowScale, rowScale));
         row.entity.setInterpolationDelay(0);
         row.entity.setInterpolationDuration(1);
     }
 
-    private double widthRatio() {
-        return config.billboard().enabled() ? config.billboard().width() / 5.25 : 1.0;
-    }
-
-    private double heightRatio() {
-        return config.billboard().enabled() ? config.billboard().height() / 3.7 : 1.0;
-    }
-
-    private double layoutScale() {
-        return Math.max(0.6, Math.min(2.5, Math.min(widthRatio(), heightRatio())));
-    }
-
     private int effectiveMaxPixelWidth() {
-        return (int) Math.round(config.style().maxPixelWidth() * widthRatio());
-    }
-
-    private int effectiveMaxNamePixelWidth() {
-        return (int) Math.round(config.style().maxNamePixelWidth() * widthRatio());
+        if (config.billboard().enabled()) {
+            double usableWidthBlocks = config.billboard().width() * (1.0 - 2.0 * config.style().marginPercent());
+            double scale = 0.75 * config.style().rowScaleMultiplier();
+            return (int) Math.round(usableWidthBlocks / (0.0125 * scale));
+        }
+        return config.style().maxPixelWidth();
     }
 
     private float effectiveBarLength() {
@@ -415,7 +404,7 @@ public final class LeaderboardDisplay {
             float length = (float) config.progressBar().length();
             float width = (float) config.progressBar().width();
             double barY = config.billboard().enabled()
-                    ? config.billboard().bottomOffset() + config.billboard().height() * 0.68
+                    ? config.billboard().bottomOffset() + config.billboard().height() * config.style().progressBarYRatio()
                     : 2.5;
             Location barLocation = base.clone().add(0, barY, 0);
             progressBackground = spawnDisplay(BlockDisplay.class, barLocation, display -> {
