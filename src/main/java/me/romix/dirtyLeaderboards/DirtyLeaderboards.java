@@ -18,7 +18,8 @@ import me.romix.dirtyLeaderboards.leaderboard.LeaderboardType;
 import me.romix.dirtyLeaderboards.leaderboard.ScoreStore;
 import me.romix.dirtyLeaderboards.leaderboard.TopService;
 import me.romix.dirtyLeaderboards.update.UpdateChecker;
-import me.romix.dirtyLeaderboards.util.StartupBanner;
+import me.romix.dirtyLeaderboards.wand.WandListener;
+import me.romix.dirtyLeaderboards.wand.WandManager;
 import org.bukkit.NamespacedKey;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.PluginCommand;
@@ -75,7 +76,7 @@ public final class DirtyLeaderboards extends JavaPlugin {
         }
         registerCommand();
         if (wandManager != null) {
-            getServer().getPluginManager().registerEvents(new me.romix.dirtyLeaderboards.wand.WandListener(wandManager), this);
+            getServer().getPluginManager().registerEvents(new WandListener(this, wandManager), this);
         }
         boolean skriptHooked = getServer().getPluginManager().getPlugin("Skript") != null
                 && SkriptHook.register(this);
@@ -124,7 +125,7 @@ public final class DirtyLeaderboards extends JavaPlugin {
         topService = new TopService(this, ioExecutor, settings, scoreStore, placeholderApiPresent);
         displayManager = new DisplayManager(this, markerKey, settings, registry, topService);
         if (wandManager == null) {
-            wandManager = new me.romix.dirtyLeaderboards.wand.WandManager(this);
+            wandManager = new WandManager(this);
         }
         warnedBoards.clear();
         for (String warning : settings.warnings()) {
@@ -244,7 +245,7 @@ public final class DirtyLeaderboards extends JavaPlugin {
         return displayManager;
     }
 
-    public me.romix.dirtyLeaderboards.wand.WandManager wandManager() {
+    public WandManager wandManager() {
         return wandManager;
     }
 

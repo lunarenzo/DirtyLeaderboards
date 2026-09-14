@@ -1,7 +1,7 @@
 package me.romix.dirtyLeaderboards.wand;
 
+import me.romix.dirtyLeaderboards.DirtyLeaderboards;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import org.bukkit.Sound;
 import org.bukkit.block.Block;
@@ -18,10 +18,11 @@ import org.bukkit.inventory.EquipmentSlot;
 
 public final class WandListener implements Listener {
 
+    private final DirtyLeaderboards plugin;
     private final WandManager wandManager;
-    private final MiniMessage mini = MiniMessage.miniMessage();
 
-    public WandListener(WandManager wandManager) {
+    public WandListener(DirtyLeaderboards plugin, WandManager wandManager) {
+        this.plugin = plugin;
         this.wandManager = wandManager;
     }
 
@@ -47,11 +48,11 @@ public final class WandListener implements Listener {
 
         if (action == Action.LEFT_CLICK_BLOCK) {
             wandManager.setPos1(player, block.getLocation(), face);
-            sendActionBar(player, "<green>Pos1 set to (<x>, <y>, <z>)</green>", block);
+            sendActionBar(player, "wand-pos1-set", block);
             player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 1.0f, 1.5f);
         } else {
             wandManager.setPos2(player, block.getLocation(), face);
-            sendActionBar(player, "<purple>Pos2 set to (<x>, <y>, <z>)</purple>", block);
+            sendActionBar(player, "wand-pos2-set", block);
             player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 1.0f, 2.0f);
         }
 
@@ -59,10 +60,9 @@ public final class WandListener implements Listener {
         if (selection != null && selection.isComplete()) {
             WandManager.SelectionResult result = wandManager.calculateWall(selection);
             if (result != null) {
-                Component msg = mini.deserialize("<gold>Selection complete! Dimensions: <white><w>x<h></white> blocks. Run <yellow>/dlb create <id></yellow> or <yellow>/dlb setwall <id></yellow></gold>",
+                plugin.messages().send(player, "wand-selection-complete",
                         Placeholder.unparsed("w", String.format("%.1f", result.width())),
                         Placeholder.unparsed("h", String.format("%.1f", result.height())));
-                player.sendMessage(msg);
             }
         }
     }
@@ -80,8 +80,8 @@ public final class WandListener implements Listener {
         wandManager.clearSelection(event.getPlayer().getUniqueId());
     }
 
-    private void sendActionBar(Player player, String template, Block block) {
-        Component text = mini.deserialize(template,
+    private void sendActionBar(Player player, String messageKey, Block block) {
+        Component text = plugin.messages().msg(messageKey,
                 Placeholder.unparsed("x", String.valueOf(block.getX())),
                 Placeholder.unparsed("y", String.valueOf(block.getY())),
                 Placeholder.unparsed("z", String.valueOf(block.getZ())));

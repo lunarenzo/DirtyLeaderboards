@@ -1,5 +1,6 @@
 package me.romix.dirtyLeaderboards.wand;
 
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
@@ -71,7 +72,7 @@ public final class WandManager {
         if (meta != null) {
             meta.getPersistentDataContainer().set(wandKey, PersistentDataType.STRING, "true");
             meta.displayName(mini.deserialize("<gradient:#A745FF:#cf97ff><bold>Leaderboard Wand</bold></gradient>"));
-            meta.lore(java.util.List.of(
+            meta.lore(List.of(
                     mini.deserialize("<gray>Left-Click block: <purple>Set Pos1</purple></gray>"),
                     mini.deserialize("<gray>Right-Click block: <purple>Set Pos2</purple></gray>"),
                     mini.deserialize("<dark_gray>Use /dlb create or /dlb setwall after selection</dark_gray>")

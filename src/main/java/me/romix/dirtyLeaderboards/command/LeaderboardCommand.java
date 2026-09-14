@@ -8,6 +8,7 @@ import me.romix.dirtyLeaderboards.config.Messages;
 import me.romix.dirtyLeaderboards.display.DisplayManager;
 import me.romix.dirtyLeaderboards.display.LeaderboardDisplay;
 import me.romix.dirtyLeaderboards.update.UpdateChecker;
+import me.romix.dirtyLeaderboards.wand.WandManager;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.ClickEvent;
 import net.kyori.adventure.text.event.HoverEvent;
@@ -56,8 +57,7 @@ public final class LeaderboardCommand implements TabExecutor {
             return;
         }
         player.getInventory().addItem(plugin.wandManager().createWandItem());
-        sender.sendMessage(net.kyori.adventure.text.minimessage.MiniMessage.miniMessage().deserialize(
-                "<gold>Given Leaderboard Wand! Left-click block for Pos1, Right-click for Pos2.</gold>"));
+        plugin.messages().send(sender, "wand-given");
     }
 
     private void create(CommandSender sender, String[] args) {
@@ -66,29 +66,25 @@ public final class LeaderboardCommand implements TabExecutor {
             return;
         }
         if (args.length < 2) {
-            sender.sendMessage(net.kyori.adventure.text.minimessage.MiniMessage.miniMessage().deserialize(
-                    "<red>Usage: /dlb create <display_id> [board1,board2...]</red>"));
+            plugin.messages().send(sender, "create-usage");
             return;
         }
         String id = args[1].toLowerCase(Locale.ROOT);
-        var selection = plugin.wandManager().getSelection(player.getUniqueId());
+        WandManager.WandSelection selection = plugin.wandManager().getSelection(player.getUniqueId());
         if (selection == null || !selection.isComplete()) {
-            sender.sendMessage(net.kyori.adventure.text.minimessage.MiniMessage.miniMessage().deserialize(
-                    "<red>You must select Pos1 (Left-click) and Pos2 (Right-click) with the wand first!</red>"));
+            plugin.messages().send(sender, "wand-no-selection");
             return;
         }
-        var wall = plugin.wandManager().calculateWall(selection);
+        WandManager.SelectionResult wall = plugin.wandManager().calculateWall(selection);
         if (wall == null) {
-            sender.sendMessage(net.kyori.adventure.text.minimessage.MiniMessage.miniMessage().deserialize(
-                    "<red>Invalid 2D selection! Ensure both points are in the same world.</red>"));
+            plugin.messages().send(sender, "wand-invalid-selection");
             return;
         }
         List<String> rotation = args.length >= 3 ? List.of(args[2].split(",")) : List.of();
         plugin.configManager().saveDisplayWall(id, wall.location(), wall.width(), wall.height(), rotation);
         plugin.reloadEverything();
         plugin.wandManager().clearSelection(player.getUniqueId());
-        sender.sendMessage(net.kyori.adventure.text.minimessage.MiniMessage.miniMessage().deserialize(
-                "<gold>Display '<white>" + id + "</white>' created and spawned successfully!</gold>"));
+        plugin.messages().send(sender, "display-created", Placeholder.unparsed("display", id));
     }
 
     private void setwall(CommandSender sender, String[] args) {
@@ -97,28 +93,24 @@ public final class LeaderboardCommand implements TabExecutor {
             return;
         }
         if (args.length < 2) {
-            sender.sendMessage(net.kyori.adventure.text.minimessage.MiniMessage.miniMessage().deserialize(
-                    "<red>Usage: /dlb setwall <display_id></red>"));
+            plugin.messages().send(sender, "setwall-usage");
             return;
         }
         String id = args[1].toLowerCase(Locale.ROOT);
-        var selection = plugin.wandManager().getSelection(player.getUniqueId());
+        WandManager.WandSelection selection = plugin.wandManager().getSelection(player.getUniqueId());
         if (selection == null || !selection.isComplete()) {
-            sender.sendMessage(net.kyori.adventure.text.minimessage.MiniMessage.miniMessage().deserialize(
-                    "<red>You must select Pos1 (Left-click) and Pos2 (Right-click) with the wand first!</red>"));
+            plugin.messages().send(sender, "wand-no-selection");
             return;
         }
-        var wall = plugin.wandManager().calculateWall(selection);
+        WandManager.SelectionResult wall = plugin.wandManager().calculateWall(selection);
         if (wall == null) {
-            sender.sendMessage(net.kyori.adventure.text.minimessage.MiniMessage.miniMessage().deserialize(
-                    "<red>Invalid 2D selection! Ensure both points are in the same world.</red>"));
+            plugin.messages().send(sender, "wand-invalid-selection");
             return;
         }
         plugin.configManager().saveDisplayWall(id, wall.location(), wall.width(), wall.height(), List.of());
         plugin.reloadEverything();
         plugin.wandManager().clearSelection(player.getUniqueId());
-        sender.sendMessage(net.kyori.adventure.text.minimessage.MiniMessage.miniMessage().deserialize(
-                "<gold>Display '<white>" + id + "</white>' resized and relocated to new wall selection!</gold>"));
+        plugin.messages().send(sender, "display-setwall", Placeholder.unparsed("display", id));
     }
 
     private void help(CommandSender sender) {
