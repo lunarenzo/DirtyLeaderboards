@@ -6,6 +6,21 @@ plugins {
 
 description = "The ultimate™ leaderboards plugin. Allows you to make modern leaderboards easily."
 
+val baseVersion = project.findProperty("version")?.toString() ?: "1.3"
+val buildNumber = System.getenv("GITHUB_RUN_NUMBER") ?: project.findProperty("buildNumber")?.toString()
+val gitRef = System.getenv("GITHUB_REF") ?: ""
+val gitCommit = System.getenv("GITHUB_SHA")?.take(7)
+
+version = when {
+    gitRef.startsWith("refs/tags/v") -> gitRef.removePrefix("refs/tags/v")
+    gitRef.startsWith("refs/tags/") -> gitRef.removePrefix("refs/tags/")
+    !buildNumber.isNullOrEmpty() -> {
+        if (!gitCommit.isNullOrEmpty()) "$baseVersion-DEV-b$buildNumber+$gitCommit"
+        else "$baseVersion-DEV-b$buildNumber"
+    }
+    else -> "$baseVersion-LOCAL"
+}
+
 tasks.shadowJar {
     archiveClassifier.set("")
 }
