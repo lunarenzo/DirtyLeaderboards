@@ -34,6 +34,10 @@ public final class RowRenderer {
     }
 
     public Component realRow(LeaderboardType type, TopEntry entry, int rank) {
+        return realRow(type, entry, rank, style.maxPixelWidth(), style.maxNamePixelWidth());
+    }
+
+    public Component realRow(LeaderboardType type, TopEntry entry, int rank, int maxPixelWidth, int maxNamePixelWidth) {
         String glyph = rankEmoji(rank);
         OfflinePlayer player = Bukkit.getOfflinePlayer(entry.uuid());
         boolean online = player.isOnline();
@@ -42,7 +46,7 @@ public final class RowRenderer {
             name = "Player";
             online = false;
         }
-        name = truncate(sanitize(name));
+        name = truncate(sanitize(name), maxNamePixelWidth);
         Component head = online || player.hasPlayedBefore()
                 ? Component.object(ObjectContents.playerHead(entry.uuid()))
                 : parse("<head:" + STEVE_HEAD + ":true>");
@@ -59,19 +63,23 @@ public final class RowRenderer {
                         + "</color> <player_head> " + nameTag,
                 Placeholder.component("player_head", head));
         Component middle = parse("<color:" + style.dotsColor() + "><shadow:" + style.dotsColor() + ":0>"
-                + dots(leftLength, rightLength));
+                + dots(leftLength, rightLength, maxPixelWidth));
         Component right = parse("<color:" + type.valueColor() + ">" + value + " <white>" + type.icon(entry.value()));
         return Component.textOfChildren(left, middle, right);
     }
 
     public Component fillerRow(LeaderboardType type, int rank) {
+        return fillerRow(type, rank, style.maxPixelWidth());
+    }
+
+    public Component fillerRow(LeaderboardType type, int rank, int maxPixelWidth) {
         String glyph = rankEmoji(rank);
         int leftLength = PixelWidth.of(glyph) + 3 + style.headSpriteWidth() + PixelWidth.of("Player") - 1;
         int rightLength = 1 + PixelWidth.of("0") + type.iconWidth();
 
         Component left = parse("<color:" + style.defaultRankColor() + ">" + glyph
                 + "</color> <head:" + STEVE_HEAD + ":true> <" + FILLER_COLOR + ">Player");
-        Component middle = parse("<color:" + style.dotsColor() + ">" + dots(leftLength, rightLength));
+        Component middle = parse("<color:" + style.dotsColor() + ">" + dots(leftLength, rightLength, maxPixelWidth));
         Component right = parse("<" + FILLER_COLOR + ">0");
         return Component.textOfChildren(left, middle, right);
     }
@@ -87,15 +95,20 @@ public final class RowRenderer {
     }
 
     public double titleScale(LeaderboardType type) {
-        double fullWidth = type.iconWidth() + PixelWidth.of(" " + type.title());
-        if (fullWidth > style.maxTitlePixelWidth()) {
-            return BASE_TITLE_SCALE * style.maxTitlePixelWidth() / fullWidth;
-        }
-        return BASE_TITLE_SCALE;
+        return titleScale(type, 1.0);
     }
 
-    private String dots(int leftLength, int rightLength) {
-        int available = style.maxPixelWidth() - (leftLength + rightLength + 2);
+    public double titleScale(LeaderboardType type, double layoutScale) {
+        double fullWidth = type.iconWidth() + PixelWidth.of(" " + type.title());
+        double baseScale = BASE_TITLE_SCALE * layoutScale;
+        if (fullWidth > style.maxTitlePixelWidth() * layoutScale) {
+            return baseScale * (style.maxTitlePixelWidth() * layoutScale) / fullWidth;
+        }
+        return baseScale;
+    }
+
+    private String dots(int leftLength, int rightLength, int maxPixelWidth) {
+        int available = maxPixelWidth - (leftLength + rightLength + 2);
         int count = Math.max(0, available / 2 - 1);
         return ".".repeat(count);
     }
@@ -104,16 +117,15 @@ public final class RowRenderer {
         return String.valueOf(RANK_EMOJIS.charAt(Math.min(Math.max(rank, 1), RANK_EMOJIS.length()) - 1));
     }
 
-    private String truncate(String name) {
-        if (PixelWidth.of(name) <= style.maxNamePixelWidth()) {
+    private String truncate(String name, int maxNamePixelWidth) {
+        if (PixelWidth.of(name) <= maxNamePixelWidth) {
             return name;
         }
         StringBuilder truncated = new StringBuilder();
         for (int i = 0; i < name.length(); i++) {
             char c = name.charAt(i);
-            if (PixelWidth.of(truncated.toString() + c + "…") > style.maxNamePixelWidth()) {
+            if (PixelWidth.of(truncated.toString() + c + "…") > maxNamePixelWidth) {
                 return truncated + "…";
-                // … instead of ... because of their size, most texture packs don't change them
             }
             truncated.append(c);
         }

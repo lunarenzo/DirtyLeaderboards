@@ -149,14 +149,24 @@ public final class WandManager {
 
         if (zAligned) {
             width = (maxZ - minZ) + 1.0;
-            centerX = minX + 0.5;
             centerZ = (minZ + maxZ + 1.0) / 2.0;
-            yaw = face == BlockFace.WEST ? 90.0f : -90.0f;
+            if (face == BlockFace.WEST) {
+                centerX = minX;
+                yaw = 90.0f;
+            } else {
+                centerX = maxX + 1.0;
+                yaw = -90.0f;
+            }
         } else {
             width = (maxX - minX) + 1.0;
             centerX = (minX + maxX + 1.0) / 2.0;
-            centerZ = minZ + 0.5;
-            yaw = face == BlockFace.NORTH ? 180.0f : 0.0f;
+            if (face == BlockFace.NORTH) {
+                centerZ = minZ;
+                yaw = 180.0f;
+            } else {
+                centerZ = maxZ + 1.0;
+                yaw = 0.0f;
+            }
         }
 
         Location center = new Location(p1.getWorld(), centerX, minY, centerZ, yaw, 0.0f);
