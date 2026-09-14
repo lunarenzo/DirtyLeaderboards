@@ -39,6 +39,7 @@ public final class DirtyLeaderboards extends JavaPlugin {
     private ScoreStore scoreStore;
     private TopService topService;
     private DisplayManager displayManager;
+    private WandManager wandManager;
     private UpdateChecker updateChecker;
     private ExecutorService ioExecutor;
     private NamespacedKey markerKey;
@@ -73,6 +74,9 @@ public final class DirtyLeaderboards extends JavaPlugin {
             return;
         }
         registerCommand();
+        if (wandManager != null) {
+            getServer().getPluginManager().registerEvents(new me.romix.dirtyLeaderboards.wand.WandListener(wandManager), this);
+        }
         boolean skriptHooked = getServer().getPluginManager().getPlugin("Skript") != null
                 && SkriptHook.register(this);
         if (placeholderApiPresent) {
@@ -90,6 +94,9 @@ public final class DirtyLeaderboards extends JavaPlugin {
     public void onDisable() {
         if (updateChecker != null) {
             updateChecker.stop();
+        }
+        if (wandManager != null) {
+            wandManager.shutdown();
         }
         if (displayManager != null) {
             displayManager.stopAll();
@@ -116,6 +123,9 @@ public final class DirtyLeaderboards extends JavaPlugin {
         scoreStore = ScoreStore.load(configManager.leaderboardsConfig());
         topService = new TopService(this, ioExecutor, settings, scoreStore, placeholderApiPresent);
         displayManager = new DisplayManager(this, markerKey, settings, registry, topService);
+        if (wandManager == null) {
+            wandManager = new me.romix.dirtyLeaderboards.wand.WandManager(this);
+        }
         warnedBoards.clear();
         for (String warning : settings.warnings()) {
             getLogger().warning(warning);
@@ -232,6 +242,10 @@ public final class DirtyLeaderboards extends JavaPlugin {
 
     public DisplayManager displayManager() {
         return displayManager;
+    }
+
+    public me.romix.dirtyLeaderboards.wand.WandManager wandManager() {
+        return wandManager;
     }
 
     public UpdateChecker updateChecker() {

@@ -70,6 +70,36 @@ public final class ConfigManager {
         }
     }
 
+    public void saveDisplayWall(String id, Location location, double width, double height, java.util.List<String> rotation) {
+        String base = "displays." + id;
+        config.set(base + ".auto-start", true);
+        config.set(base + ".force-load-chunks", true);
+        config.set(base + ".location.world", location.getWorld().getName());
+        config.set(base + ".location.x", location.getX());
+        config.set(base + ".location.y", location.getY());
+        config.set(base + ".location.z", location.getZ());
+        config.set(base + ".location.yaw", (double) location.getYaw());
+        if (rotation != null && !rotation.isEmpty()) {
+            config.set(base + ".rotation", rotation);
+        } else if (!config.contains(base + ".rotation")) {
+            config.set(base + ".rotation", java.util.List.of("kills", "deaths", "playtime"));
+        }
+        if (!config.contains(base + ".billboard")) {
+            config.set(base + ".billboard.enabled", true);
+            config.set(base + ".billboard.background-block", "black_concrete");
+            config.set(base + ".billboard.border-block", "white_concrete");
+            config.set(base + ".billboard.bottom-offset", -0.2);
+            config.set(base + ".billboard.border-thickness", 0.1);
+        }
+        config.set(base + ".billboard.width", width);
+        config.set(base + ".billboard.height", height);
+        try {
+            config.save(configFile);
+        } catch (IOException e) {
+            plugin.getLogger().log(Level.SEVERE, "Could not save config.yml", e);
+        }
+    }
+
     public void saveScores(ScoreStore store) {
         synchronized (leaderboardsLock) {
             try {
