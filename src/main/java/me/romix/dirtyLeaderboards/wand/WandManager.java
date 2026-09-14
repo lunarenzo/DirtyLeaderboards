@@ -24,8 +24,17 @@ import org.bukkit.scheduler.BukkitTask;
 public final class WandManager {
 
     private static final long EXPIRE_MILLIS = 5 * 60 * 1000L;
+    private static final Particle DUST_PARTICLE = resolveDustParticle();
     private static final Particle.DustOptions DUST_OPTIONS =
             new Particle.DustOptions(Color.fromRGB(167, 69, 255), 0.8f);
+
+    private static Particle resolveDustParticle() {
+        try {
+            return Particle.valueOf("DUST");
+        } catch (IllegalArgumentException e) {
+            return Particle.REDSTONE;
+        }
+    }
 
     private final DirtyLeaderboards plugin;
     private final NamespacedKey wandKey;
@@ -193,16 +202,16 @@ public final class WandManager {
         double maxZ = Math.max(p1.getBlockZ(), p2.getBlockZ()) + 1.0;
 
         for (double x = minX; x <= maxX; x += 0.5) {
-            player.spawnParticle(Particle.DUST, x, minY, minZ, 1, 0, 0, 0, 0, DUST_OPTIONS);
-            player.spawnParticle(Particle.DUST, x, maxY, minZ, 1, 0, 0, 0, 0, DUST_OPTIONS);
-            player.spawnParticle(Particle.DUST, x, minY, maxZ, 1, 0, 0, 0, 0, DUST_OPTIONS);
-            player.spawnParticle(Particle.DUST, x, maxY, maxZ, 1, 0, 0, 0, 0, DUST_OPTIONS);
+            player.spawnParticle(DUST_PARTICLE, x, minY, minZ, 1, 0, 0, 0, 0, DUST_OPTIONS);
+            player.spawnParticle(DUST_PARTICLE, x, maxY, minZ, 1, 0, 0, 0, 0, DUST_OPTIONS);
+            player.spawnParticle(DUST_PARTICLE, x, minY, maxZ, 1, 0, 0, 0, 0, DUST_OPTIONS);
+            player.spawnParticle(DUST_PARTICLE, x, maxY, maxZ, 1, 0, 0, 0, 0, DUST_OPTIONS);
         }
         for (double y = minY; y <= maxY; y += 0.5) {
-            player.spawnParticle(Particle.DUST, minX, y, minZ, 1, 0, 0, 0, 0, DUST_OPTIONS);
-            player.spawnParticle(Particle.DUST, maxX, y, minZ, 1, 0, 0, 0, 0, DUST_OPTIONS);
-            player.spawnParticle(Particle.DUST, minX, y, maxZ, 1, 0, 0, 0, 0, DUST_OPTIONS);
-            player.spawnParticle(Particle.DUST, maxX, y, maxZ, 1, 0, 0, 0, 0, DUST_OPTIONS);
+            player.spawnParticle(DUST_PARTICLE, minX, y, minZ, 1, 0, 0, 0, 0, DUST_OPTIONS);
+            player.spawnParticle(DUST_PARTICLE, maxX, y, minZ, 1, 0, 0, 0, 0, DUST_OPTIONS);
+            player.spawnParticle(DUST_PARTICLE, minX, y, maxZ, 1, 0, 0, 0, 0, DUST_OPTIONS);
+            player.spawnParticle(DUST_PARTICLE, maxX, y, maxZ, 1, 0, 0, 0, 0, DUST_OPTIONS);
         }
     }
 
