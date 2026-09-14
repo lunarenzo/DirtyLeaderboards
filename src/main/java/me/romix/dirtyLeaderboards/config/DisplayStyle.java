@@ -12,7 +12,6 @@ public record DisplayStyle(
         int maxNamePixelWidth,
         int maxTitlePixelWidth,
         int headSpriteWidth,
-        int maxMiddleDots,
         double titleScaleMultiplier,
         double rowScaleMultiplier,
         double marginPercent,

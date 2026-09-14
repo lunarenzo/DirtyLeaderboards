@@ -109,7 +109,7 @@ public final class RowRenderer {
 
     private String dots(int leftLength, int rightLength, int maxPixelWidth) {
         int available = maxPixelWidth - (leftLength + rightLength + 2);
-        int count = Math.min(style.maxMiddleDots(), Math.max(0, available / 2 - 1));
+        int count = Math.max(0, available / 2 - 1);
         return ".".repeat(count);
     }
 
