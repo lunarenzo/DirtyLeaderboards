@@ -52,6 +52,10 @@ tasks {
         options.encoding = "UTF-8"
     }
 
+    jar {
+        enabled = false
+    }
+
     build {
         dependsOn(shadowJar)
     }
